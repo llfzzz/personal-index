@@ -313,7 +313,6 @@ function App() {
           content={content}
           copied={copied}
           copyEmail={copyEmail}
-          navigate={navigate}
         />
       )}
     </main>
@@ -326,17 +325,15 @@ function ScrollPage({
   content,
   copied,
   copyEmail,
-  navigate,
 }: {
   content: SiteContent;
   copied: boolean;
   copyEmail: () => void;
-  navigate: (path: string) => void;
 }) {
   return (
     <div className="scroll-stage">
       <section className="scroll-section scroll-section-home" id="home" data-route="/">
-        <HomePage content={content} navigate={navigate} />
+        <HomePage content={content} />
       </section>
       <section className="scroll-section scroll-section-notes" id="notes" data-route="/notes">
         <NotesPage content={content} />
@@ -448,10 +445,8 @@ function PageLink({
 
 function HomePage({
   content,
-  navigate,
 }: {
   content: SiteContent;
-  navigate: (path: string) => void;
 }) {
   return (
     <div className="home-screen">
@@ -469,27 +464,6 @@ function HomePage({
       <div className="home-intro">
         <span>{content.home.introLabel}</span>
         <p>{content.home.introBody}</p>
-      </div>
-
-      <div className="entry-rail">
-        {content.homeLinks.map((link) => (
-          <button
-            key={link.path}
-            type="button"
-            onClick={() => {
-              if (link.path.startsWith('/office-agent/')) {
-                window.location.href = link.path;
-                return;
-              }
-
-              navigate(link.path);
-            }}
-          >
-            <span>{link.number}</span>
-            <strong>{link.title}</strong>
-            <em>{link.caption}</em>
-          </button>
-        ))}
       </div>
     </div>
   );
@@ -582,9 +556,51 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
 
         <article className="experiment-preview">
           <div className="preview-symbol">{current.symbol}</div>
-          <p>{current.kicker}</p>
-          <h2>{current.title}</h2>
-          <span>{current.body}</span>
+          <div className="preview-copy">
+            <p>{current.kicker}</p>
+            <h2>{current.title}</h2>
+            <span>{current.body}</span>
+          </div>
+
+          <div className="preview-body">
+            <div className="project-thumbnail" aria-hidden="true">
+              <div className="thumbnail-sidebar">
+                {current.preview.cards.map((card) => (
+                  <span key={card}>{card}</span>
+                ))}
+              </div>
+              <div className="thumbnail-main">
+                <div className="thumbnail-bar">
+                  <span>{current.preview.eyebrow}</span>
+                  <b>{current.status}</b>
+                </div>
+                <strong>{current.preview.title}</strong>
+                <div className="thumbnail-rows">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <em>{current.preview.footer}</em>
+              </div>
+            </div>
+
+            <div className="preview-detail">
+              <ul>
+                {current.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+              {current.ctaHref ? (
+                <a className="preview-cta" href={current.ctaHref}>
+                  {current.ctaLabel}
+                </a>
+              ) : (
+                <span className="preview-cta preview-cta-muted">
+                  {current.ctaLabel}
+                </span>
+              )}
+            </div>
+          </div>
         </article>
       </div>
     </div>
@@ -682,19 +698,6 @@ function EditorPage({
     }));
   }
 
-  function updateHomeLink(
-    index: number,
-    field: keyof SiteContent['homeLinks'][number],
-    value: string,
-  ) {
-    setContent((current) => ({
-      ...current,
-      homeLinks: current.homeLinks.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item,
-      ),
-    }));
-  }
-
   function updateNote(
     index: number,
     field: keyof SiteContent['notes'][number],
@@ -710,7 +713,7 @@ function EditorPage({
 
   function updateExperiment(
     index: number,
-    field: keyof SiteContent['experiments'][number],
+    field: 'number' | 'symbol' | 'kicker' | 'title' | 'body',
     value: string,
   ) {
     setContent((current) => ({
@@ -828,44 +831,6 @@ function EditorPage({
               }
             />
           </label>
-        </EditorPanel>
-
-        <EditorPanel title="entry rail">
-          <div className="editor-list">
-            {content.homeLinks.map((link, index) => (
-              <div className="editor-item" key={link.path}>
-                <div className="editor-grid">
-                  <label className="editor-field">
-                    <span>number</span>
-                    <input
-                      value={link.number}
-                      onChange={(event) =>
-                        updateHomeLink(index, 'number', event.target.value)
-                      }
-                    />
-                  </label>
-                  <label className="editor-field">
-                    <span>title</span>
-                    <input
-                      value={link.title}
-                      onChange={(event) =>
-                        updateHomeLink(index, 'title', event.target.value)
-                      }
-                    />
-                  </label>
-                </div>
-                <label className="editor-field">
-                  <span>caption</span>
-                  <input
-                    value={link.caption}
-                    onChange={(event) =>
-                      updateHomeLink(index, 'caption', event.target.value)
-                    }
-                  />
-                </label>
-              </div>
-            ))}
-          </div>
         </EditorPanel>
 
         <EditorPanel title="notes page">
