@@ -955,6 +955,10 @@ button {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.editor-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .editor-field {
   display: grid;
   gap: 7px;
@@ -994,6 +998,24 @@ button {
   gap: 10px;
   border-top: 1px solid var(--line);
   padding-top: 12px;
+}
+
+.editor-subgroup {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(17, 18, 15, 0.12);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.editor-subgroup h3 {
+  margin: 0;
+  color: var(--green);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .fragment-editor {
@@ -1182,6 +1204,7 @@ button {
 
   .editor-grid,
   .editor-grid.small,
+  .editor-grid.three,
   .fragment-editor {
     grid-template-columns: 1fr;
   }

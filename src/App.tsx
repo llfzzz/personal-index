@@ -25,6 +25,25 @@ function mergeContent(content: Partial<SiteContent>): SiteContent {
     ...content,
     contact: { ...defaultContent.contact, ...content.contact },
     connect: { ...defaultContent.connect, ...content.connect },
+    experiments: defaultContent.experiments.map((item, index) => {
+      const savedItem =
+        content.experiments?.find((experiment) => experiment.id === item.id) ??
+        content.experiments?.[index];
+
+      if (!savedItem) {
+        return item;
+      }
+
+      return {
+        ...item,
+        ...savedItem,
+        preview: {
+          ...item.preview,
+          ...savedItem.preview,
+        },
+        highlights: savedItem.highlights ?? item.highlights,
+      };
+    }),
     experimentsPage: {
       ...defaultContent.experimentsPage,
       ...content.experimentsPage,
@@ -713,13 +732,85 @@ function EditorPage({
 
   function updateExperiment(
     index: number,
-    field: 'number' | 'symbol' | 'kicker' | 'title' | 'body',
+    field:
+      | 'number'
+      | 'symbol'
+      | 'kicker'
+      | 'title'
+      | 'body'
+      | 'status'
+      | 'ctaLabel'
+      | 'ctaHref',
     value: string,
   ) {
     setContent((current) => ({
       ...current,
       experiments: current.experiments.map((item, itemIndex) =>
         itemIndex === index ? { ...item, [field]: value } : item,
+      ),
+    }));
+  }
+
+  function updateExperimentPreview(
+    index: number,
+    field: 'eyebrow' | 'title' | 'footer',
+    value: string,
+  ) {
+    setContent((current) => ({
+      ...current,
+      experiments: current.experiments.map((item, itemIndex) =>
+        itemIndex === index
+          ? {
+              ...item,
+              preview: {
+                ...item.preview,
+                [field]: value,
+              },
+            }
+          : item,
+      ),
+    }));
+  }
+
+  function updateExperimentPreviewCard(
+    index: number,
+    cardIndex: number,
+    value: string,
+  ) {
+    setContent((current) => ({
+      ...current,
+      experiments: current.experiments.map((item, itemIndex) =>
+        itemIndex === index
+          ? {
+              ...item,
+              preview: {
+                ...item.preview,
+                cards: item.preview.cards.map((card, currentCardIndex) =>
+                  currentCardIndex === cardIndex ? value : card,
+                ),
+              },
+            }
+          : item,
+      ),
+    }));
+  }
+
+  function updateExperimentHighlight(
+    index: number,
+    highlightIndex: number,
+    value: string,
+  ) {
+    setContent((current) => ({
+      ...current,
+      experiments: current.experiments.map((item, itemIndex) =>
+        itemIndex === index
+          ? {
+              ...item,
+              highlights: item.highlights.map((highlight, currentHighlightIndex) =>
+                currentHighlightIndex === highlightIndex ? value : highlight,
+              ),
+            }
+          : item,
       ),
     }));
   }
@@ -936,7 +1027,7 @@ function EditorPage({
           <div className="editor-list">
             {content.experiments.map((item, index) => (
               <div className="editor-item" key={item.id}>
-                <div className="editor-grid">
+                <div className="editor-grid three">
                   <label className="editor-field">
                     <span>number</span>
                     <input
@@ -955,13 +1046,42 @@ function EditorPage({
                       }
                     />
                   </label>
+                  <label className="editor-field">
+                    <span>status</span>
+                    <input
+                      value={item.status}
+                      onChange={(event) =>
+                        updateExperiment(index, 'status', event.target.value)
+                      }
+                    />
+                  </label>
+                </div>
+                <div className="editor-grid">
+                  <label className="editor-field">
+                    <span>kicker</span>
+                    <input
+                      value={item.kicker}
+                      onChange={(event) =>
+                        updateExperiment(index, 'kicker', event.target.value)
+                      }
+                    />
+                  </label>
+                  <label className="editor-field">
+                    <span>cta label</span>
+                    <input
+                      value={item.ctaLabel}
+                      onChange={(event) =>
+                        updateExperiment(index, 'ctaLabel', event.target.value)
+                      }
+                    />
+                  </label>
                 </div>
                 <label className="editor-field">
-                  <span>kicker</span>
+                  <span>cta href</span>
                   <input
-                    value={item.kicker}
+                    value={item.ctaHref}
                     onChange={(event) =>
-                      updateExperiment(index, 'kicker', event.target.value)
+                      updateExperiment(index, 'ctaHref', event.target.value)
                     }
                   />
                 </label>
@@ -983,6 +1103,90 @@ function EditorPage({
                     }
                   />
                 </label>
+
+                <div className="editor-subgroup">
+                  <h3>thumbnail preview</h3>
+                  <div className="editor-grid">
+                    <label className="editor-field">
+                      <span>eyebrow</span>
+                      <input
+                        value={item.preview.eyebrow}
+                        onChange={(event) =>
+                          updateExperimentPreview(
+                            index,
+                            'eyebrow',
+                            event.target.value,
+                          )
+                        }
+                      />
+                    </label>
+                    <label className="editor-field">
+                      <span>footer</span>
+                      <input
+                        value={item.preview.footer}
+                        onChange={(event) =>
+                          updateExperimentPreview(
+                            index,
+                            'footer',
+                            event.target.value,
+                          )
+                        }
+                      />
+                    </label>
+                  </div>
+                  <label className="editor-field">
+                    <span>preview title</span>
+                    <input
+                      value={item.preview.title}
+                      onChange={(event) =>
+                        updateExperimentPreview(
+                          index,
+                          'title',
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                  <div className="editor-grid three">
+                    {item.preview.cards.map((card, cardIndex) => (
+                      <label className="editor-field" key={`${item.id}-card-${cardIndex}`}>
+                        <span>card {cardIndex + 1}</span>
+                        <input
+                          value={card}
+                          onChange={(event) =>
+                            updateExperimentPreviewCard(
+                              index,
+                              cardIndex,
+                              event.target.value,
+                            )
+                          }
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="editor-subgroup">
+                  <h3>highlights</h3>
+                  {item.highlights.map((highlight, highlightIndex) => (
+                    <label
+                      className="editor-field"
+                      key={`${item.id}-highlight-${highlightIndex}`}
+                    >
+                      <span>point {highlightIndex + 1}</span>
+                      <textarea
+                        value={highlight}
+                        onChange={(event) =>
+                          updateExperimentHighlight(
+                            index,
+                            highlightIndex,
+                            event.target.value,
+                          )
+                        }
+                      />
+                    </label>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
