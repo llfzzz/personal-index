@@ -1,0 +1,16 @@
+[Unit]
+Description=Personal index content API
+After=network.target
+
+[Service]
+Type=simple
+User=ai
+Group=ai
+WorkingDirectory=/var/www/personal-index
+EnvironmentFile=/var/www/personal-index/.env
+ExecStart=/usr/bin/node /var/www/personal-index/server/site-content-api.mjs
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

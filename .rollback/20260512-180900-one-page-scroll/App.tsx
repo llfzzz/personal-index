@@ -10,9 +10,11 @@ import { defaultContent } from './data/profile';
 import type { SiteContent } from './data/profile';
 
 const TOKEN_STORAGE_KEY = 'quiet-interface-editor-token';
-const PUBLIC_ROUTES = defaultContent.navItems.map((item) => item.path);
 const HIDDEN_ROUTES = ['/editor'];
-const VALID_ROUTES = [...PUBLIC_ROUTES, ...HIDDEN_ROUTES];
+const VALID_ROUTES = [
+  ...defaultContent.navItems.map((item) => item.path),
+  ...HIDDEN_ROUTES,
+];
 
 type PublishStatus = {
   tone: 'idle' | 'loading' | 'success' | 'error';
@@ -63,19 +65,9 @@ function getRoute() {
   return VALID_ROUTES.includes(normalizedPath) ? normalizedPath : '/';
 }
 
-function routeToSectionId(path: string) {
-  return path === '/' ? 'home' : path.replace(/^\//, '');
-}
-
-function scrollToPublicRoute(path: string, behavior: ScrollBehavior = 'smooth') {
-  const section = document.getElementById(routeToSectionId(path));
-  section?.scrollIntoView({ behavior, block: 'start' });
-}
-
 function App() {
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const [route, setRoute] = useState(getRoute);
-  const hasRestoredInitialRoute = useRef(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const [copied, setCopied] = useState(false);
   const [publishStatus, setPublishStatus] = useState<PublishStatus>({
@@ -84,14 +76,7 @@ function App() {
   });
 
   useEffect(() => {
-    function handleLocationChange() {
-      const nextRoute = getRoute();
-      setRoute(nextRoute);
-      if (PUBLIC_ROUTES.includes(nextRoute)) {
-        window.setTimeout(() => scrollToPublicRoute(nextRoute, 'auto'), 0);
-      }
-    }
-
+    const handleLocationChange = () => setRoute(getRoute());
     window.addEventListener('popstate', handleLocationChange);
     window.addEventListener('hashchange', handleLocationChange);
     return () => {
@@ -114,77 +99,9 @@ function App() {
     };
   }, []);
 
-
-  useEffect(() => {
-    if (hasRestoredInitialRoute.current || !PUBLIC_ROUTES.includes(route)) {
-      return;
-    }
-
-    hasRestoredInitialRoute.current = true;
-    window.setTimeout(() => scrollToPublicRoute(route, 'auto'), 0);
-  }, [route]);
-
-  useEffect(() => {
-    if (route === '/editor') {
-      return;
-    }
-
-    let frame = 0;
-
-    function updateActiveRoute() {
-      frame = 0;
-      const anchor = window.innerHeight * 0.38;
-      let nextRoute = '/';
-      let bestDistance = Number.POSITIVE_INFINITY;
-
-      for (const path of PUBLIC_ROUTES) {
-        const section = document.getElementById(routeToSectionId(path));
-        if (!section) continue;
-
-        const rect = section.getBoundingClientRect();
-        const distance = Math.abs(rect.top - anchor);
-        const inRange = rect.top <= anchor && rect.bottom >= anchor;
-
-        if (inRange || distance < bestDistance) {
-          bestDistance = distance;
-          nextRoute = path;
-          if (inRange) break;
-        }
-      }
-
-      setRoute((current) => (current === nextRoute ? current : nextRoute));
-      if (window.location.pathname !== nextRoute) {
-        window.history.replaceState({}, '', nextRoute);
-      }
-    }
-
-    function handleScroll() {
-      if (frame) return;
-      frame = window.requestAnimationFrame(updateActiveRoute);
-    }
-
-    updateActiveRoute();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-
-    return () => {
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-      }
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, [route]);
-
   function navigate(path: string) {
     window.history.pushState({}, '', path);
     setRoute(path);
-
-    if (PUBLIC_ROUTES.includes(path)) {
-      scrollToPublicRoute(path);
-      return;
-    }
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -297,8 +214,14 @@ function App() {
         </nav>
       </header>
 
-      {route === '/editor' ? (
-        <div className="route-stage editor-stage">
+      <div className="route-stage" key={route}>
+        {route === '/' ? <HomePage content={content} navigate={navigate} /> : null}
+        {route === '/notes' ? <NotesPage content={content} /> : null}
+        {route === '/experiments' ? <ExperimentsPage content={content} /> : null}
+        {route === '/connect' ? (
+          <ConnectPage content={content} copied={copied} copyEmail={copyEmail} />
+        ) : null}
+        {route === '/editor' ? (
           <EditorPage
             content={content}
             navigate={navigate}
@@ -307,49 +230,12 @@ function App() {
             resetContent={resetContent}
             setContent={setContent}
           />
-        </div>
-      ) : (
-        <ScrollPage
-          content={content}
-          copied={copied}
-          copyEmail={copyEmail}
-          navigate={navigate}
-        />
-      )}
+        ) : null}
+      </div>
     </main>
   );
 }
 
-
-
-function ScrollPage({
-  content,
-  copied,
-  copyEmail,
-  navigate,
-}: {
-  content: SiteContent;
-  copied: boolean;
-  copyEmail: () => void;
-  navigate: (path: string) => void;
-}) {
-  return (
-    <div className="scroll-stage">
-      <section className="scroll-section scroll-section-home" id="home" data-route="/">
-        <HomePage content={content} navigate={navigate} />
-      </section>
-      <section className="scroll-section scroll-section-notes" id="notes" data-route="/notes">
-        <NotesPage content={content} />
-      </section>
-      <section className="scroll-section scroll-section-experiments" id="experiments" data-route="/experiments">
-        <ExperimentsPage content={content} />
-      </section>
-      <section className="scroll-section scroll-section-connect" id="connect" data-route="/connect">
-        <ConnectPage content={content} copied={copied} copyEmail={copyEmail} />
-      </section>
-    </div>
-  );
-}
 
 function ProfileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -454,7 +340,7 @@ function HomePage({
   navigate: (path: string) => void;
 }) {
   return (
-    <div className="home-screen">
+    <section className="home-screen">
       <div className="hero-type">
         <p>{content.home.eyebrow}</p>
         <h1>
@@ -473,25 +359,14 @@ function HomePage({
 
       <div className="entry-rail">
         {content.homeLinks.map((link) => (
-          <button
-            key={link.path}
-            type="button"
-            onClick={() => {
-              if (link.path.startsWith('/office-agent/')) {
-                window.location.href = link.path;
-                return;
-              }
-
-              navigate(link.path);
-            }}
-          >
+          <button key={link.path} type="button" onClick={() => navigate(link.path)}>
             <span>{link.number}</span>
             <strong>{link.title}</strong>
             <em>{link.caption}</em>
           </button>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -529,7 +404,7 @@ function Specimen({ content }: { content: SiteContent }) {
 
 function NotesPage({ content }: { content: SiteContent }) {
   return (
-    <div className="content-page notes-page">
+    <section className="content-page notes-page">
       <div className="page-heading">
         <p>{content.notesPage.eyebrow}</p>
         <h1>{content.notesPage.title}</h1>
@@ -544,7 +419,7 @@ function NotesPage({ content }: { content: SiteContent }) {
           </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -558,7 +433,7 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
   );
 
   return (
-    <div className="content-page experiments-page">
+    <section className="content-page experiments-page">
       <div className="page-heading">
         <p>{content.experimentsPage.eyebrow}</p>
         <h1>{content.experimentsPage.title}</h1>
@@ -587,7 +462,7 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
           <span>{current.body}</span>
         </article>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -601,7 +476,7 @@ function ConnectPage({
   copyEmail: () => void;
 }) {
   return (
-    <div className="connect-page">
+    <section className="connect-page">
       <div className="connect-copy">
         <p>{content.connect.eyebrow}</p>
         <h1>{content.connect.title}</h1>
@@ -615,7 +490,7 @@ function ConnectPage({
         <span>phone</span>
         <a href={`tel:${content.contact.phone}`}>{content.contact.phone}</a>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -1,120 +1,126 @@
 export const defaultContent = {
   contact: {
     email: 'luofangzheng26@gmail.com',
+    phone: '19892256630',
   },
   navItems: [
     { label: 'home', path: '/' },
     { label: 'notes', path: '/notes' },
     { label: 'experiments', path: '/experiments' },
     { label: 'connect', path: '/connect' },
-    { label: 'editor', path: '/editor' },
   ],
   home: {
-    eyebrow: 'personal homepage / interface fragment',
-    titleLines: ['quiet', 'interface', 'restless ideas'],
-    introLabel: 'not a resume',
+    eyebrow: 'luo fangzheng / product-minded builder',
+    titleLines: ['luo', 'fangzheng', 'ai product builder'],
+    introLabel: 'data science undergrad',
     introBody:
-      'A small digital room for taste, motion, tools and unfinished thoughts.',
-    specimenCaptionLabel: 'hover',
-    specimenCaptionText: 'pieces drift, but keep form',
+      'I build runnable AI product prototypes across product flow, frontend workspace, Node/PocketBase data layers and RAG-assisted LLM workflows.',
+    specimenCaptionLabel: 'current focus',
+    specimenCaptionText: 'meeting memory, office agents, enterprise AI',
   },
   homeLinks: [
     {
       number: '01',
       title: 'notes',
-      caption: 'what keeps coming back',
+      caption: 'product thinking and working notes',
       path: '/notes',
     },
     {
       number: '02',
       title: 'experiments',
-      caption: 'interfaces, tools, motion',
+      caption: 'MVPs, prototypes, delivery proof',
       path: '/experiments',
     },
     {
       number: '03',
       title: 'connect',
-      caption: 'a quiet signal',
+      caption: 'email and quiet follow-up',
       path: '/connect',
+    },
+    {
+      number: '04',
+      title: 'office agent',
+      caption: 'open the AI Office Agent Assistant',
+      path: '/office-agent/',
     },
   ],
   notesPage: {
     eyebrow: 'notes',
-    title: 'things I keep noticing',
+    title: 'what I am building toward',
   },
   notes: [
     {
       number: '01',
-      title: 'blank space is a material',
+      title: 'AI product, not only prompts',
       body:
-        'It gives a page somewhere to breathe. It makes small things feel intentional instead of unfinished.',
+        'I care about the full path around a model: user scene, context, workflow, output structure, failure state and what the user does next.',
     },
     {
       number: '02',
-      title: 'interfaces should have temperature',
+      title: 'buildable MVP first',
       body:
-        'Not everything needs to be loud, fast or clever. Some screens should feel calm enough to stay with.',
+        'My strongest proof point is runnable work: React interfaces, account isolation, data persistence, API calls, RAG documents and usable demos.',
     },
     {
       number: '03',
-      title: 'tools are emotional objects',
+      title: 'RAG needs product context',
       body:
-        'A good tool changes how people think while making them feel more in control.',
+        'Documents are not decoration. They should help the product remember project background, reduce vague answers and make meeting outputs more consistent.',
     },
     {
       number: '04',
-      title: 'unfinished is sometimes more alive',
+      title: 'delivery includes writing',
       body:
-        'A personal site can be a room that keeps changing, not a sealed presentation.',
+        'I like turning fuzzy bugs, product ideas and AI behavior into clear records that developers, users and reviewers can act on.',
     },
   ],
   experimentsPage: {
-    eyebrow: 'experiments',
-    title: 'small things that could become bigger',
+    eyebrow: 'proof points',
+    title: 'runnable work and product traces',
   },
   experiments: [
     {
-      id: 'motion',
+      id: 'meeting-memory',
       number: '01',
-      kicker: 'motion study',
-      title: 'soft motion system',
-      symbol: 'm',
-      body:
-        'A small study about movement that reacts without stealing attention.',
-    },
-    {
-      id: 'interface',
-      number: '02',
-      kicker: 'interface object',
-      title: 'quiet dashboard',
-      symbol: 'ui',
-      body:
-        'Dense information, low visual noise, and small states that make the screen feel handled.',
-    },
-    {
-      id: 'ai',
-      number: '03',
-      kicker: 'tool thought',
-      title: 'human AI loop',
+      kicker: 'full-stack AI MVP',
+      title: 'meeting memory assistant',
       symbol: 'ai',
       body:
-        'A workflow sketch for AI that appears only when it improves the path.',
+        'A React, TypeScript, Express and PocketBase prototype for account-based meeting memory, transcription, structured minutes, RAG documents and follow-up Q&A.',
     },
     {
-      id: 'archive',
-      number: '04',
-      kicker: 'visual archive',
-      title: 'things worth saving',
-      symbol: 'a',
+      id: 'workflow',
+      number: '02',
+      kicker: 'AI workflow design',
+      title: 'meeting to memory loop',
+      symbol: 'rag',
       body:
-        'A collection of webpages, products and interactions that feel strangely correct.',
+        'A product flow from meeting understanding to structured summary, quality self-check, action items, long-term memory and single-meeting questions.',
+    },
+    {
+      id: 'challenge-cup',
+      number: '03',
+      kicker: 'prototype and showcase',
+      title: 'challenge cup pages',
+      symbol: 'web',
+      body:
+        'Project prototype and presentation pages shaped around user value, feature hierarchy, homepage modules, product explanation and demo delivery.',
+    },
+    {
+      id: 'internship',
+      number: '04',
+      kicker: 'software dev internship',
+      title: 'interface iteration',
+      symbol: 'dev',
+      body:
+        'Internal management-system page adjustments, feature testing, API coordination, issue reproduction and pre-release verification.',
     },
   ],
   connect: {
     eyebrow: 'signal',
-    title: 'say something quiet.',
+    title: 'talk about AI products.',
     body:
-      'If the room feels close to your taste, leave a trace here.',
+      'For AI Agent, enterprise AI product or development internship conversations, reach me by email.',
     mailLabel: 'mail',
   },
   fragments: [

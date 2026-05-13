@@ -1,5 +1,9 @@
 node_modules
 dist
+content/site-content.json
+content/site-content.json.bak
+logs
+run
 .npm-cache
 .env
 .env.*
