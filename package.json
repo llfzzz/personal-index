@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "content-api": "node server/site-content-api.mjs",
-    "dev": "vite",
+    "dev": "node node_modules/vite/bin/vite.js",
     "build": "node node_modules/typescript/bin/tsc -b && node node_modules/vite/bin/vite.js build && node scripts/create-route-indexes.mjs",
-    "preview": "vite preview"
+    "preview": "node node_modules/vite/bin/vite.js preview"
   },
   "dependencies": {
     "react": "^19.2.4",

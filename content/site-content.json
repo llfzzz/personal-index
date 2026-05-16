@@ -1,0 +1,313 @@
+{
+  "contact": {
+    "email": "luofangzheng26@gmail.com",
+    "phone": "19892256630"
+  },
+  "navItems": [
+    {
+      "label": "home",
+      "path": "/"
+    },
+    {
+      "label": "notes",
+      "path": "/notes"
+    },
+    {
+      "label": "projects",
+      "path": "/experiments"
+    },
+    {
+      "label": "connect",
+      "path": "/connect"
+    }
+  ],
+  "home": {
+    "eyebrow": "striver never give up / luo fangzheng",
+    "titleLines": [
+      "Creative",
+      "never",
+      "cliche"
+    ],
+    "introLabel": "i always say / 一直相信",
+    "introBody": "Refusing to be shaped by labels or limits. Every step forward becomes proof of growing stronger, freer, and closer to the person I choose to become.\n不囿名限，步步为证：更强，也更自由。",
+    "specimenCaptionLabel": "about me / 关于我",
+    "specimenCaptionText": "undefined, unbound, always forward\n不被定义，持续向前"
+  },
+  "notesPage": {
+    "eyebrow": "notes",
+    "title": "what I am building toward"
+  },
+  "notes": [
+    {
+      "number": "01",
+      "title": "AI product, not only prompts",
+      "body": "I care about the full path around a model: user scene, context, workflow, output structure, failure state and what the user does next.\n我更关心模型外侧的场景、上下文、流程和下一步。"
+    },
+    {
+      "number": "02",
+      "title": "buildable MVP first",
+      "body": "My strongest proof point is runnable work: React interfaces, account isolation, data persistence, API calls, RAG documents and usable demos.\n能运行的作品，比抽象描述更有说服力。"
+    },
+    {
+      "number": "03",
+      "title": "RAG needs product context",
+      "body": "Documents are not decoration. They should help the product remember project background, reduce vague answers and make meeting outputs more consistent.\n资料库应该帮产品记住背景，并稳定输出。"
+    },
+    {
+      "number": "04",
+      "title": "delivery includes writing",
+      "body": "I like turning fuzzy bugs, product ideas and AI behavior into clear records that developers, users and reviewers can act on.\n把模糊问题写清楚，也是交付的一部分。"
+    }
+  ],
+  "experimentsPage": {
+    "eyebrow": "proof points",
+    "title": "runnable projects you can open"
+  },
+  "experiments": [
+    {
+      "id": "ai-office-agent",
+      "number": "01",
+      "kicker": "deployed full-stack AI MVP",
+      "title": "AI Office Agent Assistant",
+      "symbol": "office",
+      "body": "A runnable office-skill workspace evolved from meeting memory: login, RAG library, Agent Plan, structured skill output, output records and feedback iteration.\n围绕真实办公场景，把 Agent 计划、技能执行和结果沉淀连成闭环。",
+      "status": "live workspace",
+      "ctaLabel": "Open and try the live workspace",
+      "ctaHref": "/office-agent/",
+      "preview": {
+        "eyebrow": "workspace preview",
+        "title": "Agent Plan -> Skill Run -> Output Record",
+        "cards": [
+          "Meeting minutes",
+          "Weekly report",
+          "PRD review"
+        ],
+        "footer": "React / Express / PocketBase / RAG"
+      },
+      "highlights": [
+        "Built the React/Vite workspace, sidebar flow and core skill pages.",
+        "Wrapped Express APIs for plan, run, output records and feedback.",
+        "Used PocketBase for auth, account isolation and persistent AI outputs."
+      ]
+    },
+    {
+      "id": "learning-support",
+      "number": "02",
+      "kicker": "team project / RAG practice",
+      "title": "Learning Support System",
+      "symbol": "study",
+      "body": "A learning-assistance system for scattered study materials, knowledge-point organization, basic retrieval and topic-based review paths.\n面向分散学习材料，用知识点和检索把复习路径组织起来。",
+      "status": "case note",
+      "ctaLabel": "Public preview not available",
+      "ctaHref": "",
+      "preview": {
+        "eyebrow": "system concept",
+        "title": "Material -> Knowledge Point -> Review Path",
+        "cards": [
+          "Vue pages",
+          "Spring Boot API",
+          "RAG notes"
+        ],
+        "footer": "Team project, no public preview"
+      },
+      "highlights": [
+        "Implemented Vue interaction pages and coordinated backend API integration.",
+        "Worked with Spring Boot and MySQL data structures for study content.",
+        "Introduced RAG-style knowledge slices for Q&A and study suggestions."
+      ]
+    },
+    {
+      "id": "challenge-cup",
+      "number": "03",
+      "kicker": "prototype archive",
+      "title": "challenge cup pages",
+      "symbol": "web",
+      "body": "Prototype and presentation pages shaped around user value, feature hierarchy, homepage modules, product explanation and demo delivery.\n把价值表达、功能层级和演示流程先搭成可讲清的页面。",
+      "status": "coming soon",
+      "ctaLabel": "Case page coming soon",
+      "ctaHref": "",
+      "preview": {
+        "eyebrow": "project archive",
+        "title": "Showcase page in progress",
+        "cards": [
+          "Value story",
+          "Feature map",
+          "Demo flow"
+        ],
+        "footer": "More detail will be added after cleanup"
+      },
+      "highlights": [
+        "Organized product explanation around scenario, value and feature hierarchy.",
+        "Prepared page modules for prototype presentation and demo delivery.",
+        "Still polishing public-facing case materials."
+      ]
+    },
+    {
+      "id": "product-iteration",
+      "number": "04",
+      "kicker": "software dev practice",
+      "title": "interface iteration",
+      "symbol": "dev",
+      "body": "Internal management-system page adjustments, feature testing, API coordination, issue reproduction and pre-release verification.\n在真实业务页面里处理迭代、联调、复现和发布前检查。",
+      "status": "coming soon",
+      "ctaLabel": "More project notes soon",
+      "ctaHref": "",
+      "preview": {
+        "eyebrow": "iteration log",
+        "title": "Interface fixes, tests and release checks",
+        "cards": [
+          "Page adjustment",
+          "API coordination",
+          "QA notes"
+        ],
+        "footer": "Continuing to turn work notes into public cases"
+      },
+      "highlights": [
+        "Handled interface adjustments and interaction checks in real workflow pages.",
+        "Coordinated API behavior, issue reproduction and pre-release verification.",
+        "More complete write-up is still being refined."
+      ]
+    }
+  ],
+  "connect": {
+    "eyebrow": "signal / 联系",
+    "title": "talk about AI products.",
+    "body": "For conversations around AI agents, enterprise AI products, product thinking, and real-world implementation, feel free to reach me by email.\n如果您想就人工智能代理、企业人工智能产品、产品思维和实际应用等话题进行交流，欢迎随时通过电子邮件与我联系。",
+    "mailLabel": "mail",
+    "phoneLabel": "phone",
+    "copiedLabel": "copied"
+  },
+  "fragments": [
+    {
+      "id": 1,
+      "x": "42%",
+      "y": "7%",
+      "w": "17%",
+      "h": "22%",
+      "rx": 22,
+      "ry": -28,
+      "rotate": "-12deg",
+      "tone": "#0f2f27",
+      "clip": "polygon(48% 0, 100% 88%, 8% 100%)"
+    },
+    {
+      "id": 2,
+      "x": "30%",
+      "y": "20%",
+      "w": "25%",
+      "h": "17%",
+      "rx": -30,
+      "ry": -18,
+      "rotate": "9deg",
+      "tone": "#bdddb6",
+      "clip": "polygon(0 10%, 100% 0, 82% 100%, 16% 74%)"
+    },
+    {
+      "id": 3,
+      "x": "55%",
+      "y": "25%",
+      "w": "20%",
+      "h": "26%",
+      "rx": 38,
+      "ry": -2,
+      "rotate": "11deg",
+      "tone": "#e9d6b8",
+      "clip": "polygon(12% 0, 100% 20%, 72% 100%, 0 76%)"
+    },
+    {
+      "id": 4,
+      "x": "22%",
+      "y": "38%",
+      "w": "24%",
+      "h": "26%",
+      "rx": -42,
+      "ry": 16,
+      "rotate": "-17deg",
+      "tone": "#8fbfa8",
+      "clip": "polygon(28% 0, 100% 38%, 64% 100%, 0 56%)"
+    },
+    {
+      "id": 5,
+      "x": "43%",
+      "y": "39%",
+      "w": "25%",
+      "h": "24%",
+      "rx": 4,
+      "ry": 24,
+      "rotate": "2deg",
+      "tone": "#f7f1d3",
+      "clip": "polygon(0 18%, 76% 0, 100% 66%, 34% 100%)"
+    },
+    {
+      "id": 6,
+      "x": "64%",
+      "y": "49%",
+      "w": "16%",
+      "h": "19%",
+      "rx": 48,
+      "ry": 24,
+      "rotate": "22deg",
+      "tone": "#315e49",
+      "clip": "polygon(30% 0, 100% 52%, 62% 100%, 0 34%)"
+    },
+    {
+      "id": 7,
+      "x": "31%",
+      "y": "62%",
+      "w": "28%",
+      "h": "18%",
+      "rx": -18,
+      "ry": 42,
+      "rotate": "8deg",
+      "tone": "#d7e7be",
+      "clip": "polygon(0 0, 88% 10%, 100% 86%, 22% 100%)"
+    },
+    {
+      "id": 8,
+      "x": "53%",
+      "y": "66%",
+      "w": "23%",
+      "h": "16%",
+      "rx": 32,
+      "ry": 40,
+      "rotate": "-11deg",
+      "tone": "#b9d9c3",
+      "clip": "polygon(12% 0, 100% 0, 72% 100%, 0 78%)"
+    },
+    {
+      "id": 9,
+      "x": "18%",
+      "y": "57%",
+      "w": "13%",
+      "h": "16%",
+      "rx": -52,
+      "ry": 22,
+      "rotate": "-28deg",
+      "tone": "#d7c2a8",
+      "clip": "polygon(50% 0, 100% 100%, 0 72%)"
+    },
+    {
+      "id": 10,
+      "x": "72%",
+      "y": "31%",
+      "w": "11%",
+      "h": "14%",
+      "rx": 58,
+      "ry": -8,
+      "rotate": "18deg",
+      "tone": "#f0b99e",
+      "clip": "polygon(0 18%, 100% 0, 76% 100%)"
+    }
+  ],
+  "profile": {
+    "mark": "0.0",
+    "menuLabel": "open personal links",
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/llfzzz",
+        "kind": "github"
+      }
+    ]
+  }
+}

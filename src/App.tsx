@@ -19,12 +19,25 @@ type PublishStatus = {
   message: string;
 };
 
+type ExperimentItem = SiteContent['experiments'][number];
+
 function mergeContent(content: Partial<SiteContent>): SiteContent {
   return {
     ...defaultContent,
     ...content,
     contact: { ...defaultContent.contact, ...content.contact },
     connect: { ...defaultContent.connect, ...content.connect },
+    profile: {
+      ...defaultContent.profile,
+      ...content.profile,
+      links: (content.profile?.links?.length
+        ? content.profile.links
+        : defaultContent.profile.links
+      ).map((link, index) => ({
+        ...(defaultContent.profile.links[index] ?? {}),
+        ...link,
+      })),
+    },
     experiments: defaultContent.experiments.map((item, index) => {
       const savedItem =
         content.experiments?.find((experiment) => experiment.id === item.id) ??
@@ -301,7 +314,7 @@ function App() {
       }
     >
       <header className="top-nav">
-        <ProfileMenu />
+        <ProfileMenu content={content} />
         <nav aria-label="site navigation">
           {content.navItems.map((item) => (
             <PageLink
@@ -367,8 +380,8 @@ function ScrollPage({
   );
 }
 
-function ProfileMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+function ProfileMenu({ content }: { content: SiteContent }) {
+  const [isOpen, setIsOpen] = useState(true);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -400,26 +413,34 @@ function ProfileMenu() {
         className="home-mark profile-trigger"
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        aria-label="open personal links"
+        aria-label={content.profile.menuLabel}
         onClick={() => setIsOpen((current) => !current)}
       >
-        <span>0.0</span>
+        <span>{content.profile.mark}</span>
       </button>
 
       {isOpen ? (
-        <div className="profile-tile-menu" role="menu" aria-label="personal links">
-          <a
-            className="profile-tile"
-            href="https://github.com/llfzzz"
-            target="_blank"
-            rel="noreferrer"
-            role="menuitem"
-            aria-label="open GitHub profile"
-            title="GitHub"
-            onClick={() => setIsOpen(false)}
-          >
-            <GithubIcon />
-          </a>
+        <div className="profile-tile-menu" role="menu" aria-label={content.profile.menuLabel}>
+          {content.profile.links.map((link, index) => (
+            <a
+              className="profile-tile"
+              href={link.href}
+              key={`${link.kind}-${index}`}
+              target="_blank"
+              rel="noreferrer"
+              role="menuitem"
+              aria-label={`open ${link.label}`}
+              title={link.label}
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
+            >
+              {link.kind === 'github' ? (
+                <GithubIcon />
+              ) : (
+                <span className="profile-tile-label">{link.label}</span>
+              )}
+            </a>
+          ))}
         </div>
       ) : null}
     </div>
@@ -561,7 +582,10 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
         <div className="experiment-list">
           {content.experiments.map((item) => (
             <button
-              className={item.id === active ? 'active' : ''}
+              className={[
+                item.id === active ? 'active' : '',
+                item.ctaHref ? 'has-demo' : '',
+              ].filter(Boolean).join(' ')}
               key={item.id}
               onClick={() => setActive(item.id)}
               type="button"
@@ -569,6 +593,7 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
               <span>{item.number}</span>
               <strong>{item.title}</strong>
               <em>{item.kicker}</em>
+              {item.ctaHref ? <small>live demo</small> : null}
             </button>
           ))}
         </div>
@@ -582,26 +607,7 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
           </div>
 
           <div className="preview-body">
-            <div className="project-thumbnail" aria-hidden="true">
-              <div className="thumbnail-sidebar">
-                {current.preview.cards.map((card) => (
-                  <span key={card}>{card}</span>
-                ))}
-              </div>
-              <div className="thumbnail-main">
-                <div className="thumbnail-bar">
-                  <span>{current.preview.eyebrow}</span>
-                  <b>{current.status}</b>
-                </div>
-                <strong>{current.preview.title}</strong>
-                <div className="thumbnail-rows">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <em>{current.preview.footer}</em>
-              </div>
-            </div>
+            <ProjectThumbnail experiment={current} />
 
             <div className="preview-detail">
               <ul>
@@ -609,19 +615,65 @@ function ExperimentsPage({ content }: { content: SiteContent }) {
                   <li key={highlight}>{highlight}</li>
                 ))}
               </ul>
-              {current.ctaHref ? (
-                <a className="preview-cta" href={current.ctaHref}>
-                  {current.ctaLabel}
-                </a>
-              ) : (
-                <span className="preview-cta preview-cta-muted">
-                  {current.ctaLabel}
-                </span>
-              )}
+              <div className="preview-actions">
+                {current.ctaHref ? (
+                  <a className="preview-cta preview-cta-live" href={current.ctaHref}>
+                    <span>view / try</span>
+                    <strong>{current.ctaLabel}</strong>
+                  </a>
+                ) : (
+                  <span className="preview-cta preview-cta-muted">
+                    {current.ctaLabel}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </article>
       </div>
+    </div>
+  );
+}
+
+function ProjectThumbnail({ experiment }: { experiment: ExperimentItem }) {
+  const thumbnail = (
+    <>
+      <div className="thumbnail-sidebar">
+        {experiment.preview.cards.map((card) => (
+          <span key={card}>{card}</span>
+        ))}
+      </div>
+      <div className="thumbnail-main">
+        <div className="thumbnail-bar">
+          <span>{experiment.preview.eyebrow}</span>
+          <b>{experiment.status}</b>
+        </div>
+        <strong>{experiment.preview.title}</strong>
+        <div className="thumbnail-rows">
+          <span />
+          <span />
+          <span />
+        </div>
+        <em>{experiment.preview.footer}</em>
+      </div>
+    </>
+  );
+
+  if (experiment.ctaHref) {
+    return (
+      <a
+        className="project-thumbnail project-thumbnail-link"
+        href={experiment.ctaHref}
+        aria-label={experiment.ctaLabel}
+      >
+        {thumbnail}
+      </a>
+    );
+  }
+
+  return (
+    <div className="project-thumbnail" aria-hidden="true">
+      {thumbnail}
     </div>
   );
 }
@@ -645,9 +697,9 @@ function ConnectPage({
       <div className="connect-actions">
         <span>{content.connect.mailLabel}</span>
         <button type="button" onClick={copyEmail}>
-          {copied ? 'copied' : content.contact.email}
+          {copied ? content.connect.copiedLabel : content.contact.email}
         </button>
-        <span>phone</span>
+        <span>{content.connect.phoneLabel}</span>
         <a href={`tel:${content.contact.phone}`}>{content.contact.phone}</a>
       </div>
     </div>
@@ -714,6 +766,32 @@ function EditorPage({
       navItems: current.navItems.map((item, itemIndex) =>
         itemIndex === index ? { ...item, label: value } : item,
       ),
+    }));
+  }
+
+  function updateProfile(
+    field: Exclude<keyof SiteContent['profile'], 'links'>,
+    value: string,
+  ) {
+    setContent((current) => ({
+      ...current,
+      profile: { ...current.profile, [field]: value },
+    }));
+  }
+
+  function updateProfileLink(
+    index: number,
+    field: keyof SiteContent['profile']['links'][number],
+    value: string,
+  ) {
+    setContent((current) => ({
+      ...current,
+      profile: {
+        ...current.profile,
+        links: current.profile.links.map((link, linkIndex) =>
+          linkIndex === index ? { ...link, [field]: value } : link,
+        ),
+      },
     }));
   }
 
@@ -865,6 +943,62 @@ function EditorPage({
                   onChange={(event) => updateNavLabel(index, event.target.value)}
                 />
               </label>
+            ))}
+          </div>
+        </EditorPanel>
+
+        <EditorPanel title="profile links">
+          <div className="editor-grid">
+            <label className="editor-field">
+              <span>mark</span>
+              <input
+                value={content.profile.mark}
+                onChange={(event) => updateProfile('mark', event.target.value)}
+              />
+            </label>
+            <label className="editor-field">
+              <span>menu label</span>
+              <input
+                value={content.profile.menuLabel}
+                onChange={(event) =>
+                  updateProfile('menuLabel', event.target.value)
+                }
+              />
+            </label>
+          </div>
+          <div className="editor-list">
+            {content.profile.links.map((link, index) => (
+              <div className="editor-item" key={`${link.kind}-${index}`}>
+                <div className="editor-grid three">
+                  <label className="editor-field">
+                    <span>label</span>
+                    <input
+                      value={link.label}
+                      onChange={(event) =>
+                        updateProfileLink(index, 'label', event.target.value)
+                      }
+                    />
+                  </label>
+                  <label className="editor-field">
+                    <span>href</span>
+                    <input
+                      value={link.href}
+                      onChange={(event) =>
+                        updateProfileLink(index, 'href', event.target.value)
+                      }
+                    />
+                  </label>
+                  <label className="editor-field">
+                    <span>kind</span>
+                    <input
+                      value={link.kind}
+                      onChange={(event) =>
+                        updateProfileLink(index, 'kind', event.target.value)
+                      }
+                    />
+                  </label>
+                </div>
+              </div>
             ))}
           </div>
         </EditorPanel>
@@ -1248,13 +1382,39 @@ function EditorPage({
               />
             </label>
             <label className="editor-field">
-              <span>button</span>
+              <span>mail label</span>
               <input
                 value={content.connect.mailLabel}
                 onChange={(event) =>
                   setContent((current) => ({
                     ...current,
                     connect: { ...current.connect, mailLabel: event.target.value },
+                  }))
+                }
+              />
+            </label>
+          </div>
+          <div className="editor-grid">
+            <label className="editor-field">
+              <span>phone label</span>
+              <input
+                value={content.connect.phoneLabel}
+                onChange={(event) =>
+                  setContent((current) => ({
+                    ...current,
+                    connect: { ...current.connect, phoneLabel: event.target.value },
+                  }))
+                }
+              />
+            </label>
+            <label className="editor-field">
+              <span>copied label</span>
+              <input
+                value={content.connect.copiedLabel}
+                onChange={(event) =>
+                  setContent((current) => ({
+                    ...current,
+                    connect: { ...current.connect, copiedLabel: event.target.value },
                   }))
                 }
               />

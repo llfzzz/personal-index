@@ -2,8 +2,8 @@
   color: #11120f;
   background: #f1efe6;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+    Inter, "Noto Sans SC", "Microsoft YaHei", "PingFang SC", ui-sans-serif,
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   line-height: 1.35;
   text-rendering: optimizeLegibility;
@@ -115,9 +115,9 @@ button {
 .profile-tile-menu {
   position: absolute;
   top: calc(100% + 10px);
-  left: 14px;
+  left: 10px;
   display: grid;
-  grid-template-columns: repeat(3, 44px);
+  grid-template-columns: 1fr;
   gap: 8px;
   width: max-content;
   padding: 0;
@@ -126,9 +126,9 @@ button {
 }
 
 .profile-tile {
+  display: grid;
   width: 44px;
   height: 44px;
-  display: grid;
   place-items: center;
   border: 1px solid rgba(17, 18, 15, 0.2);
   background: rgba(247, 245, 235, 0.96);
@@ -150,6 +150,16 @@ button {
 .profile-tile svg {
   width: 22px;
   height: 22px;
+}
+
+.profile-tile-label {
+  max-width: 116px;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .top-nav nav {
@@ -366,6 +376,8 @@ button {
 
 .specimen-caption strong {
   font-size: 13px;
+  line-height: 1.35;
+  white-space: pre-line;
 }
 
 .home-intro {
@@ -388,6 +400,8 @@ button {
   margin: 9px 0 0;
   color: #45443d;
   font-size: 16px;
+  line-height: 1.52;
+  white-space: pre-line;
 }
 
 .experiment-list span,
@@ -466,6 +480,8 @@ button {
   margin: 0;
   color: #555348;
   font-size: 18px;
+  line-height: 1.5;
+  white-space: pre-line;
 }
 
 .experiment-layout {
@@ -490,6 +506,9 @@ button {
   cursor: pointer;
   text-align: left;
   background: transparent;
+  transition:
+    background 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .experiment-list button strong {
@@ -505,6 +524,26 @@ button {
   font-size: 12px;
   font-style: normal;
   text-transform: uppercase;
+}
+
+.experiment-list button small {
+  grid-column: 2;
+  justify-self: start;
+  border: 1px solid rgba(47, 107, 81, 0.28);
+  padding: 5px 8px;
+  color: #214c3b;
+  background: rgba(186, 218, 176, 0.28);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.experiment-list button.active,
+.experiment-list button:hover {
+  background: rgba(186, 218, 176, 0.14);
+  box-shadow: inset 3px 0 0 rgba(47, 107, 81, 0.72);
 }
 
 .experiment-list button.active strong,
@@ -575,6 +614,8 @@ button {
   margin-top: 16px;
   color: #555348;
   font-size: clamp(16px, 1.1vw, 18px);
+  line-height: 1.5;
+  white-space: pre-line;
 }
 
 .preview-body {
@@ -596,6 +637,25 @@ button {
     linear-gradient(135deg, rgba(247, 245, 235, 0.9), rgba(226, 236, 218, 0.68)),
     rgba(247, 245, 235, 0.72);
   box-shadow: 0 24px 70px rgba(36, 46, 33, 0.12);
+}
+
+.project-thumbnail-link {
+  color: inherit;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.project-thumbnail-link:hover {
+  border-color: rgba(47, 107, 81, 0.5);
+  box-shadow: 0 30px 78px rgba(36, 46, 33, 0.18);
+  transform: translateY(-2px);
+}
+
+.project-thumbnail-link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
 }
 
 .thumbnail-sidebar {
@@ -688,7 +748,14 @@ button {
   padding-top: 12px;
   color: #555348;
   font-size: 15px;
-  line-height: 1.38;
+  line-height: 1.48;
+  white-space: pre-line;
+}
+
+.preview-actions {
+  display: grid;
+  gap: 10px;
+  align-content: end;
 }
 
 .preview-cta,
@@ -705,6 +772,40 @@ button {
     background 160ms ease,
     color 160ms ease,
     transform 160ms ease;
+}
+
+.preview-cta-live {
+  width: min(100%, 360px);
+  min-height: 70px;
+  justify-items: start;
+  align-content: center;
+  gap: 5px;
+  border-color: rgba(47, 107, 81, 0.34);
+  padding: 12px 16px;
+  color: var(--green);
+  background: rgba(186, 218, 176, 0.34);
+  box-shadow: 0 18px 46px rgba(36, 46, 33, 0.12);
+}
+
+.preview-cta-live span {
+  color: var(--green);
+  font-size: 11px;
+}
+
+.preview-cta-live strong {
+  color: #214c3b;
+  font-family:
+    Inter, "Noto Sans SC", "Microsoft YaHei", "PingFang SC", ui-sans-serif,
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(15px, 1.15vw, 19px);
+  font-weight: 950;
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.preview-cta-live:hover span,
+.preview-cta-live:hover strong {
+  color: var(--paper);
 }
 
 .preview-cta:hover {
@@ -734,10 +835,12 @@ button {
 
 .connect-copy > span {
   display: block;
-  max-width: 540px;
+  max-width: 620px;
   margin-top: 22px;
   color: #555348;
   font-size: 20px;
+  line-height: 1.5;
+  white-space: pre-line;
 }
 
 .connect-actions {
@@ -1104,6 +1207,15 @@ button {
     grid-template-columns: 58px 1fr;
   }
 
+  .profile-tile-menu {
+    left: 6px;
+  }
+
+  .profile-tile {
+    width: 40px;
+    height: 40px;
+  }
+
   .home-mark,
   .top-nav nav a {
     height: 50px;
@@ -1164,8 +1276,17 @@ button {
     grid-template-columns: 34px minmax(0, 1fr);
   }
 
+  .experiment-list button small {
+    font-size: 9px;
+  }
+
   .experiment-preview {
     min-height: 460px;
+  }
+
+  .preview-cta,
+  .preview-cta-muted {
+    width: 100%;
   }
 
   .project-thumbnail {
