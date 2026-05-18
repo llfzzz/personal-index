@@ -2,6 +2,11 @@ node_modules
 dist
 content/site-content.json
 content/site-content.json.bak
+.rollback/
+*.bak
+*.backup-*
+backup/
+backups/
 logs
 run
 .npm-cache
